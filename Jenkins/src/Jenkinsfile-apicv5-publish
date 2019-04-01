@@ -37,6 +37,22 @@ node {
  *  (From the credentials plugin in Cloudbees)
  */
 def gitCheckout(String workspace, String url, String credentialsId) {
+
+
+        try {
+        //Delete the content of the workspace and clone the source code into current directory
+        sh """
+            rm -rf ${workspace}/tmp
+            git clone ${jenkinsfileURL} ${workspace}/tmp
+            cd ${workspace}/tmp
+            echo pwd && ls -l     
+        """
+        } catch(exe){
+            echo "Failed to retrieve to the content of the workspace with Status Code: ${exe}"
+            throw exe                       
+        }  
+
+
     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "${credentialsId}",
                       passwordVariable: 'pass', usernameVariable: 'user']]) {
 
