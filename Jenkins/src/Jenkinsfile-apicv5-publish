@@ -11,7 +11,7 @@ intServer = "eu-de.apiconnect.ibmcloud.com"
 intCatalog = "integration"
 intOrg = "integration"
 intCreds = "icapikey"
-apicPath = "/home/uadmin/.nvm/versions/node/v8.15.1/bin/apic"
+apicPath = "apic"
 
 node {    
 
