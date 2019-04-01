@@ -1,0 +1,53 @@
+swagger: '2.0'
+info:
+  x-ibm-name: give-version
+  title: give-version
+  version: 2.0.0
+  description: Use gateway script policy to give dynamically name and version of this api
+schemes:
+  - https
+host: $(catalog.host)
+basePath: /version
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  clientIdHeader:
+    type: apiKey
+    in: header
+    name: X-IBM-Client-Id
+security:
+  - clientIdHeader: []
+x-ibm-configuration:
+  testable: true
+  enforced: true
+  cors:
+    enabled: true
+  assembly:
+    execute:
+      - gatewayscript:
+          title: gatewayscript
+          version: 1.0.0
+          source: |
+            var out = {"Sample":"api for devops"};
+            out.name = apim.getvariable('api.name');
+            out.version = apim.getvariable('api.version');
+            //out.context=apim.getContext();
+            session.output.write(JSON.stringify(out));
+            apim.output("application/json");
+    catch: []
+  phase: realized
+  properties:
+    target-url:
+      value: 'https://randomuser.me/api/'
+      description: ''
+      encoded: false
+paths:
+  /api:
+    get:
+      responses:
+        '200':
+          description: 200 OK
+definitions: {}
+tags: []
