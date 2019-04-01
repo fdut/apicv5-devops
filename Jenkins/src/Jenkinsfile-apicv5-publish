@@ -51,24 +51,6 @@ def gitCheckout(String workspace, String url, String credentialsId) {
             echo "Failed to retrieve to the content of the workspace with Status Code: ${exe}"
             throw exe                       
         }  
-
-
-    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "${credentialsId}",
-                      passwordVariable: 'pass', usernameVariable: 'user']]) {
-
-        // Checkout the code and navigate to the target directory
-        int slashIdx = url.indexOf("://")
-        String urlWithCreds = url.substring(0, slashIdx + 3) +
-                "\"${user}:${pass}\"@" + url.substring(slashIdx + 3);        
-        
-        //Delete the content of the workspace and clone the source code into current directory
-        sh """
-            rm -rf ${workspace}/tmp
-            git clone ${jenkinsfileURL} ${workspace}/tmp
-            cd ${workspace}/tmp
-            echo pwd && ls -l     
-        """
-    }
 }
 
 def deploy(String server, String creds, String product, String catalog, String org, String space = "") {
