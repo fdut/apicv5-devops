@@ -109,7 +109,7 @@ def apic_logout(String server){
 def apic_publish(String product, String catalog, String org, String server, String space = ""){
     echo "Publishing product ${product}"
         if (!space.trim()) {
-            def status = sh script: "${apicPath} products:publish ${product} --catalog ${catalog} --organization ${org} --server ${server}", 
+            def status = sh script: "${apicPath} products:publish tmp/${product} --catalog ${catalog} --organization ${org} --server ${server}", 
                 returnStatus: true  
             return status  
         }
