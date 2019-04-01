@@ -1,17 +1,16 @@
 // Pull in default Jenkinsfile
 jenkinsfileURL = "https://github.com/fdut/apicv5-devops"
 
-product = "randomuser-product_1.0.0.yaml"
+product = "give-version-product_1.0.0.yaml"
 
 //Name of credential object in Jenkins
-creds = "fdutorg-169"
+creds = "icapikey"
 
 //APIC Environment variables
-intServer = "api-manager-ui.manager-api-ova.swgtec.fr.ibm.com"
+intServer = "eu-de.apiconnect.ibmcloud.com"
 intCatalog = "integration"
-intOrg = "forg"
-intCreds = "forg-9"
-intRealm = "provider/default-idp-2"
+intOrg = "integration"
+intCreds = "icapikey"
 
 node {    
 
@@ -93,18 +92,13 @@ def deploy(String server, String creds, String product, String catalog, String o
 }
 
 def apic_login(String server, String creds){
-    def usernameVariableLocal, passwordVariableLocal
-    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: "${creds}",
-    usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {                        
-        usernameVariableLocal = env.USERNAME
-        passwordVariableLocal = env.PASSWORD
-        
-        stage ('Login') {     
-        sh "apic login -s ${server} -u ${usernameVariableLocal} -p ${passwordVariableLocal} -r provider/default-idp-2"
-        } 
-    } 
+    withCredentials([string(credentialsId: "${creds}", variable: 'APIKEY')]) {
+    sh '''
+      apic login --server ${server} -k $APIKEY
+    '''
+  }
 
-    echo "Successfully Logged In:  ${usernameVariableLocal}@${server}"
+    echo "Successfully Logged In: ${server}"
 }
 
 
@@ -116,7 +110,7 @@ def apic_logout(String server){
 def apic_publish(String product, String catalog, String org, String server, String space = ""){
     echo "Publishing product ${product}"
         if (!space.trim()) {
-            def status = sh script: "apic products:publish  -c ${catalog} -o ${org} -s ${server} --scope catalog tmp/${product} ", 
+            def status = sh script: "apic products:publish ${product} --catalog ${catalog} --organization ${org} --server ${server}", 
                 returnStatus: true  
             return status  
         }
