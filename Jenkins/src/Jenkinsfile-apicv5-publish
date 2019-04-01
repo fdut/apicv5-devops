@@ -92,9 +92,9 @@ def deploy(String server, String creds, String product, String catalog, String o
 
 def apic_login(String server, String creds){
     withCredentials([string(credentialsId: "${creds}", variable: 'APIKEY')]) {
-    sh '''
-      $apicPath login --server $server -k $APIKEY
-    '''
+    sh """
+      ${apicPath} login --server ${server} -k $APIKEY
+    """
   }
 
     echo "Successfully Logged In: ${server}"
