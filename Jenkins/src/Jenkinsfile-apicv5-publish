@@ -11,6 +11,7 @@ intServer = "eu-de.apiconnect.ibmcloud.com"
 intCatalog = "integration"
 intOrg = "integration"
 intCreds = "icapikey"
+apicPath = "/home/uadmin/.nvm/versions/node/v8.15.1/bin/apic"
 
 node {    
 
@@ -92,7 +93,7 @@ def deploy(String server, String creds, String product, String catalog, String o
 def apic_login(String server, String creds){
     withCredentials([string(credentialsId: "${creds}", variable: 'APIKEY')]) {
     sh '''
-      apic login --server ${server} -k $APIKEY
+      ${apicPath} login --server ${server} -k $APIKEY
     '''
   }
 
@@ -108,12 +109,12 @@ def apic_logout(String server){
 def apic_publish(String product, String catalog, String org, String server, String space = ""){
     echo "Publishing product ${product}"
         if (!space.trim()) {
-            def status = sh script: "apic products:publish ${product} --catalog ${catalog} --organization ${org} --server ${server}", 
+            def status = sh script: "${apicPath} products:publish ${product} --catalog ${catalog} --organization ${org} --server ${server}", 
                 returnStatus: true  
             return status  
         }
         else {
-        def status = sh script: "apic products:publish  -c ${catalog} -o ${org} -s ${server} --space ${space} --scope space tmp/${product} ", 
+        def status = sh script: "${apicPath} products:publish  -c ${catalog} -o ${org} -s ${server} --space ${space} --scope space tmp/${product} ", 
             returnStatus: true  
         return status     
         }  
