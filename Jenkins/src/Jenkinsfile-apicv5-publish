@@ -38,8 +38,6 @@ node {
  *  (From the credentials plugin in Cloudbees)
  */
 def gitCheckout(String workspace, String url, String credentialsId) {
-
-
         try {
         //Delete the content of the workspace and clone the source code into current directory
         sh """
@@ -91,15 +89,19 @@ def deploy(String server, String creds, String product, String catalog, String o
 }
 
 def apic_login(String server, String creds){
+
     withCredentials([string(credentialsId: "${creds}", variable: 'APIKEY')]) {
-    sh """
-      ${apicPath} login --server ${server} -k $APIKEY
-    """
+
+          stage ('Login') { 
+            sh """
+                 ${apicPath} login --server ${server} -k $APIKEY
+            """
+          }
   }
 
     echo "Successfully Logged In: ${server}"
 }
-e
+
 
 def apic_logout(String server){
     sh "apic logout -s ${server}"
