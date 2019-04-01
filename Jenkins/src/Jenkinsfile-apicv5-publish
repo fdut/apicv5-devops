@@ -9,7 +9,7 @@ creds = "icapikey"
 //APIC Environment variables
 intServer = "eu-de.apiconnect.ibmcloud.com"
 intCatalog = "integration"
-intOrg = "integration"
+intOrg = "fdutorg-dev"
 intCreds = "icapikey"
 apicPath = "apic"
 
