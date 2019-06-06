@@ -1,4 +1,4 @@
-// Pull in default Jenkinsfile
+// Pull in default Jenkinsfile.
 jenkinsfileURL = "https://github.com/fdut/apicv5-devops"
 
 product = "give-version-product_1.0.0.yaml"
